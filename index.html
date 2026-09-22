@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬《港片之王》爭霸戰</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #f39c12; /* 經典金黃色 */
+            --accent-color: #e74c3c;
+            --text-color: #f5f5f5;
+            --text-secondary: #b0b0b0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            border: 2px solid var(--primary-color);
+        }
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+        .rules {
+            background: rgba(243, 156, 18, 0.1);
+            padding: 15px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .options label {
+            display: block;
+            margin: 6px 0;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .options input {
+            margin-right: 8px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            background: #2c2c2c;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 30px;
+        }
+        .submit-btn:hover {
+            background-color: #d68910;
+        }
+        #result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #252525;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px dashed var(--primary-color);
+        }
+        .score-display {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .explanation {
+            font-size: 0.9rem;
+            color: #88c0d0;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎬《港片之王》爭霸戰</h1>
+    <div class="rules">
+        <h3>📌 遊戲規則說明</h3>
+        <ul>
+            <li><strong>PART 1｜選擇題</strong>：第 1 ～ 15 題（每題 1 分）</li>
+            <li><strong>PART 2｜填空／簡答題</strong>：第 16 ～ 25 題（每題 3 分）[cite: 1.2]</li>
+            <li><strong>PART 3｜加分題 Bonus</strong>：第 26 ～ 30 題（每題 1 分）[cite: 1.2]</li>
+            <li><strong>總分</strong>：滿分 50 分（基本題 45 分 + 加分題 5 分）[cite: 1.2]</li>
+        </ul>
+    </div>
+
+    <form id="quiz-form">
+        <!-- PART 1 選擇題範例 (你可以把Google文件中的1-15題全部填進來) -->
+        <h2>🟢 PART 1｜選擇題（每題 1 分）</h2>
+        
+        <div class="question-block" data-id="q1" data-type="choice" data-answer="B">
+            <div class="question-title">1. 《唐伯虎點秋香》中，華夫人的天下第一奇毒是？</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> A. 含笑半步癲</label>
+                <label><input type="radio" name="q1" value="B"> B. 一日喪命散</label>
+                <label><input type="radio" name="q1" value="C"> C. 奇銀合歡散</label>
+                <label><input type="radio" name="q1" value="D"> D. 我愛一條柴</label>
+            </div>
+            <div class="explanation" style="display:none;">💡 解析：華夫人介紹自家毒藥，一日喪命散絕不會留命到五更！</div>
+        </div>
+
+        <div class="question-block" data-id="q2" data-type="choice" data-answer="C">
+            <div class="question-title">2. 《賭俠》中小刀打電話給賭神時，賭神人在哪裡？</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A"> A. 美國</label>
+                <label><input type="radio" name="q2" value="B"> B. 香港</label>
+                <label><input type="radio" name="q2" value="C"> C. 巴西</label>
+                <label><input type="radio" name="q2" value="D"> D. 澳門</label>
+            </div>
+        </div>
+
+        <div class="question-block" data-id="q3" data-type="choice" data-answer="C">
+            <div class="question-title">3. 《無間道》中，梁朝偉飾演的陳永仁在天台對劉德華說的名台詞是？</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A"> A. 其實我是個警察</label>
+                <label><input type="radio" name="q3" value="B"> B. 以前我沒得選，現在我想做個好人</label>
+                <label><input type="radio" name="q3" value="C"> C. 對不起，我是警察</label>
+                <label><input type="radio" name="q3" value="D"> D. 我話講完，誰贊成，誰反對？</label>
+            </div>
+            <div class="explanation" style="display:none;">💡 解析：經典的天台名場面，黃金對白流傳至今。</div>
+        </div>
+
+        <!-- 可以依照此格式繼續往下擴充第 4 到 30 題 -->
+
+        <button type="button" class="submit-btn" onclick="calculateScore()">交卷結算成績</button>
+    </form>
+
+    <div id="result-section">
+        <h2>🏆 測驗結果結算</h2>
+        <div class="score-display" id="final-score">0 / 50 分</div>
+        <p id="score-comment"></p>
+    </div>
+</div>
+
+<script>
+function calculateScore() {
+    let totalScore = 0;
+    const blocks = document.querySelectorAll('.question-block');
+
+    blocks.forEach(block => {
+        const type = block.getAttribute('data-type');
+        const correctAnswer = block.getAttribute('data-answer');
+        const expDiv = block.querySelector('.explanation');
+        if (expDiv) expDiv.style.display = 'block'; // 顯示解析
+
+        if (type === 'choice') {
+            const selected = block.querySelector('input[type="radio"]:checked');
+            if (selected && selected.value === correctAnswer) {
+                totalScore += 1; // 選擇題每題 1 分
+            }
+        } else if (type === 'text') {
+            const inputVal = block.querySelector('input[type="text"]').value.trim();
+            // 簡單示範模糊比對或精準比對
+            if (inputVal === correctAnswer) {
+                totalScore += 3; // 簡答題每題 3 分
+            }
+        }
+    });
+
+    // 顯示結果
+    document.getElementById('final-score').innerText = `${totalScore} / 50 分`;
+    
+    let comment = "";
+    if (totalScore >= 45) {
+        comment = "🔥 太神啦！你是當之無愧的「港片之王」！";
+    } else if (totalScore >= 30) {
+        comment = "👍 不錯喔！對港片有一定的深厚造詣！";
+    } else {
+        comment = "😅 看來你需要再多重溫幾部周星馳與王家衛經典電影囉！";
+    }
+    document.getElementById('score-comment').innerText = comment;
+
+    // 捲動至結果區
+    document.getElementById('result-section').style.display = 'block';
+    document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
