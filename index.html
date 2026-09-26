@@ -1,426 +1,621 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>終極港片爭霸戰</title>
+    <title>港片爭霸戰 - 終極港片戲精大考驗</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neonPink: '#ff007f',
+                        neonCyan: '#00f0ff',
+                        neonYellow: '#ffe600',
+                        darkBg: '#090a0f',
+                        cardBg: '#131520'
+                    },
+                    boxShadow: {
+                        'neon-pink': '0 0 15px rgba(255, 0, 127, 0.6), inset 0 0 15px rgba(255, 0, 127, 0.2)',
+                        'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.6), inset 0 0 15px rgba(0, 240, 255, 0.2)',
+                        'neon-yellow': '0 0 15px rgba(255, 230, 0, 0.6)',
+                        'glow-box': '0 0 25px rgba(0, 240, 255, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
-        
-        :root {
-            --bg-color: #090a0f;
-            --neon-pink: #ff007f;
-            --neon-blue: #00f0ff;
-            --neon-yellow: #f3e600;
-            --text-color: #ffffff;
-            --card-bg: rgba(18, 20, 32, 0.9);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans TC', sans-serif;
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-            padding: 20px;
+            font-family: 'Noto Serif TC', serif;
+            background-color: #090a0f;
+            color: #f1f5f9;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
-        /* 復古霓虹掃描線背景 */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; bottom: 0; left: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 999;
-            background-size: 100% 4px, 6px 100%;
+        .neon-title-pink {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff007f, 0 0 40px #ff007f, 0 0 80px #ff007f;
+        }
+
+        .neon-title-cyan {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+        }
+
+        .neon-border-pink {
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 10px #ff007f, inset 0 0 10px #ff007f;
+        }
+
+        .neon-border-cyan {
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 10px #00f0ff, inset 0 0 10px #00f0ff;
+        }
+
+        /* Scanline effect for retro feel */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 999;
+            opacity: 0.6;
         }
 
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: var(--card-bg);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1);
-            border-radius: 16px;
-            padding: 30px;
-            position: relative;
-            z-index: 1000;
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.7;
+            }
         }
 
-        h1 {
-            text-align: center;
-            font-size: 2.2rem;
-            color: var(--neon-yellow);
-            text-shadow: 0 0 10px rgba(243, 230, 0, 0.6), 0 0 20px rgba(243, 230, 0, 0.4);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-size: 1rem;
-            color: var(--neon-blue);
-            margin-bottom: 25px;
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
-        }
-
-        /* 首頁說明區塊 */
-        #start-screen .rules-box {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px dashed var(--neon-pink);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-
-        .rules-box h3 {
-            color: var(--neon-pink);
-            margin-bottom: 10px;
-            text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
-        }
-
-        .rules-box ul {
-            list-style: none;
-            line-height: 1.8;
-            font-size: 0.95rem;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            background: linear-gradient(45deg, var(--neon-pink), #ff5e00);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
-            transition: all 0.3s ease;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.8);
-        }
-
-        /* 答題畫面 */
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-        }
-
-        #question-category {
-            color: var(--neon-yellow);
-            font-weight: bold;
-        }
-
-        #question-progress {
-            color: var(--neon-blue);
-        }
-
-        .question-text {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .option-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--neon-blue);
-            color: var(--text-color);
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 1.05rem;
-            transition: all 0.2s ease;
-        }
-
-        .option-btn:hover {
-            background: rgba(0, 240, 255, 0.15);
-            border-color: var(--neon-yellow);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
-        }
-
-        /* 填空題輸入框 */
-        .text-input-container {
-            margin-bottom: 25px;
-        }
-
-        .text-input-container input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid var(--neon-pink);
-            border-radius: 8px;
-            color: white;
-            font-size: 1.1rem;
-            outline: none;
-            box-shadow: inset 0 0 10px rgba(255, 0, 127, 0.2);
-        }
-
-        .text-input-container input:focus {
-            border-color: var(--neon-yellow);
-            box-shadow: 0 0 15px rgba(243, 230, 0, 0.4);
-        }
-
-        .submit-btn {
-            background: linear-gradient(45deg, #00f0ff, #0077ff);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-        }
-
-        /* 結果畫面 */
-        .result-card {
-            text-align: center;
-        }
-
-        .score-display {
-            font-size: 3rem;
-            color: var(--neon-yellow);
-            font-weight: 900;
-            margin: 15px 0;
-            text-shadow: 0 0 15px rgba(243, 230, 0, 0.6);
-        }
-
-        .rank-title {
-            font-size: 1.5rem;
-            color: var(--neon-pink);
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .podcast-promo {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--neon-yellow);
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 25px;
-            text-align: left;
-        }
-
-        .podcast-promo img {
-            width: 100%;
-            max-height: 180px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            box-shadow: 0 0 10px rgba(243, 230, 0, 0.3);
-        }
-
-        .podcast-promo h4 {
-            color: var(--neon-yellow);
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        .podcast-promo p {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #ddd;
-            margin-bottom: 12px;
-        }
-
-        .hide {
-            display: none !important;
+        .flicker {
+            animation: flicker 4s infinite;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between items-center p-4 md:p-8 selection:bg-neonPink selection:text-white">
+    <div class="scanlines"></div>
 
-    <div class="container">
-        <!-- 首頁 -->
-        <div id="start-screen">
-            <h1>🎬 終極港片爭霸戰</h1>
-            <div class="subtitle">測試你是真正的港片戲精，還是只看過賭神？挑戰 30 道港片經典難題！</div>
-            <div class="rules-box">
-                <h3>📌 遊戲規則說明</h3>
-                <ul>
-                    <li>• 第 1 ～ 15 題：選擇題（每題 1 分）</li>
-                    <li>• 第 16 ～ 25 題：填空／簡答題（每題 3 分）</li>
-                    <li>• 第 26 ～ 30 題：加分題 Bonus（每題 1 分）</li>
-                    <li>• 總分：滿分 50 分（基本題 45 分 + 加分題 5 分）</li>
-                    <li>• 題目範圍：港片經典台詞、電影細節、經典場景</li>
+    <!-- Header / Banner -->
+    <header class="w-full max-w-4xl text-center py-6 mb-2">
+        <div class="inline-block px-4 py-1 mb-2 border border-neonCyan/40 rounded-full text-xs tracking-widest text-neonCyan uppercase bg-neonCyan/10">
+            🎬 << Talklish 透客李許 >>專屬題庫
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black tracking-wider neon-title-pink flicker uppercase mb-2">
+            第一屆 港片爭霸戰
+        </h1>
+        <p class="text-sm md:text-base text-gray-400 tracking-widest">
+            —— 30題，基本總分：50 分 ——
+        </p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-3xl flex-grow flex flex-col justify-center my-4">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-cardBg/95 backdrop-blur-md p-6 md:p-10 rounded-2xl neon-border-cyan shadow-glow-box text-center relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-neonPink/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-neonCyan/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="mb-8">
+                <span class="text-6xl md:text-8xl">👑</span>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-neonYellow">
+             挑戰最地道的港片電影大考驗！
+            </h2>
+            <div class="text-gray-300 text-sm md:text-base leading-relaxed mb-8 max-w-xl mx-auto text-left bg-black/40 p-5 rounded-xl border border-gray-800">
+                <p class="font-bold text-neonCyan mb-2">📌 遊戲規則說明：</p>
+                <ul class="space-y-1 text-xs md:text-sm text-gray-300 mb-4">
+                    <li>• 第 1 ～ 15 題：選擇題（每題 1 分，共 15 分）</li>
+                    <li>• 第 16 ～ 25 題：填空／簡答題（每題 3 分，共 30 分）</li>
+                    <li>• 第 26 ～ 30 題：有聽 Talklish 透客李許的最新一級的 Podcast 就會知道的加分題（每題 1 分，共 5 分）</li>
                 </ul>
+                <p class="text-xs text-neonYellow mb-2">總分：滿分 50 分（基本題 45 分 + 加分題 5 分）</p>
+                <p class="text-xs text-gray-400">題目範圍：港片經典台詞、電影細節、經典場景</p>
             </div>
-            <button class="btn" onclick="startQuiz()">開始挑戰</button>
+            <button onclick="startQuiz()" class="w-full md:w-auto px-10 py-4 bg-gradient-to-r from-neonPink to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold text-lg rounded-xl shadow-neon-pink transition-all transform hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider">
+                立即開始挑戰 ⚡
+            </button>
         </div>
 
-        <!-- 答題區 -->
-        <div id="quiz-screen" class="hide">
-            <div class="quiz-header">
-                <span id="question-category"></span>
-                <span id="question-progress"></span>
-            </div>
-            <div class="question-text" id="question-text"></div>
-            
-            <div id="options-container" class="options-container"></div>
-            
-            <div id="text-input-container" class="text-input-container hide">
-                <input type="text" id="user-answer-input" placeholder="請輸入您的答案...">
+        <!-- Quiz Screen (Hidden initially) -->
+        <div id="quiz-screen" class="hidden bg-cardBg/95 backdrop-blur-md p-6 md:p-8 rounded-2xl border border-gray-800 shadow-glow-box relative">
+            <!-- Progress & Score info -->
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-800 text-sm">
+                <span id="progress-indicator" class="text-neonCyan font-bold tracking-wider">題目 1 / 30</span>
+                <span id="current-score" class="text-neonYellow font-bold">目前得分: 0 / 50</span>
             </div>
 
-            <button class="btn submit-btn" id="next-btn" onclick="handleNext()">下一題</button>
+            <!-- Question Box -->
+            <div class="mb-6">
+                <span id="question-category" class="inline-block px-3 py-1 mb-3 text-xs rounded bg-gray-800 text-gray-300 border border-gray-700">類別</span>
+                <h3 id="question-text" class="text-lg md:text-xl font-bold leading-relaxed text-white">
+                    載入中...
+                </h3>
+            </div>
+
+            <!-- Options Container (for Multiple Choice) -->
+            <div id="options-container" class="grid grid-cols-1 gap-3.5 mb-6">
+                <!-- Dynamically injected options -->
+            </div>
+
+            <!-- Input Container (for Fill-in / Short Answer) -->
+            <div id="input-container" class="hidden mb-6">
+                <input type="text" id="short-answer-input" placeholder="請輸入您的答案..." class="w-full px-4 py-3 bg-black/55 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-neonCyan transition-all text-base mb-3">
+                <button onclick="submitShortAnswer()" class="w-full py-3 bg-neonPink text-white font-bold rounded-xl hover:bg-pink-600 transition-all cursor-pointer shadow-neon-pink">
+                    確認送出答案 ➔
+                </button>
+            </div>
+
+            <!-- Feedback Box -->
+            <div id="feedback-box" class="hidden mt-4 p-4 rounded-xl bg-gray-900/90 border border-gray-700 text-sm">
+                <p id="feedback-text" class="mb-3 text-gray-200"></p>
+                <button onclick="nextQuestion()" class="w-full py-3 bg-neonCyan text-darkBg font-bold rounded-lg hover:bg-cyan-400 transition-all cursor-pointer shadow-neon-cyan">
+                    下一題 ➔
+                </button>
+            </div>
         </div>
 
-        <!-- 結果結算區 -->
-        <div id="result-screen" class="result-screen hide">
-            <h1>🏆 挑戰結算</h1>
-            <div class="score-display" id="final-score">0 分</div>
-            <div class="rank-title" id="rank-title"></div>
-            <div id="result-message" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.5;"></div>
+        <!-- Result Screen (Hidden initially) -->
+        <div id="result-screen" class="hidden bg-cardBg/95 backdrop-blur-md p-6 md:p-10 rounded-2xl neon-border-pink shadow-glow-box text-center">
+            <div class="text-6xl md:text-7xl mb-4" id="result-emoji">👑</div>
+            <p class="text-xs tracking-widest text-neonPink uppercase mb-1">測驗成績揭曉</p>
+            <h2 class="text-3xl md:text-4xl font-black mb-2 text-white" id="result-title">
+                封號計算中...
+            </h2>
+            <div class="my-6 p-4 rounded-xl bg-black/40 border border-gray-800 inline-block w-full max-w-md">
+                <p class="text-gray-400 text-sm mb-1">您的最終得分</p>
+                <p class="text-4xl font-extrabold text-neonYellow" id="final-score-display">0 / 50</p>
+            </div>
+            <p id="result-comment" class="text-gray-300 text-sm md:text-base leading-relaxed mb-6 max-w-lg mx-auto text-left bg-black/30 p-4 rounded-xl border border-gray-800/80">
+                評語載入中...
+            </p>
 
-            <!-- Podcast 宣傳與圖片 -->
-            <div class="podcast-promo">
-                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='300' viewBox='0 0 600 300'><rect width='600' height='300' fill='%23121420'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23f3e600' font-size='28' font-family='sans-serif'>TALKLISH 頻道視覺圖</text></svg>" alt="Talklish 視覺圖" id="promo-img">
-                <h4>🎙️ Podcast : Talk_lish 透客李許 👇 本週想講在這</h4>
-                <p>你好，我們是 Talklsih 主講人｜木子李、言午許。我們專做一些沒知識性的分享、全方位的閒聊，關注娛樂、音樂、展覽、流行與荒誕人生，分享一些不管到幾歲都要持續熱愛生活的大小事。你的第三個好朋友，負責講幹話！</p>
-                <a href="https://linkgoods.com/talklish" target="_blank" class="btn" style="padding: 10px; font-size: 1rem;">立即收聽 TALKLISH 🔗</a>
+            <!-- Talklish Promo Section -->
+            <div class="mb-8 p-5 bg-gradient-to-br from-purple-950/40 to-pink-950/40 border border-neonPink/40 rounded-xl text-left">
+                <p class="text-neonCyan font-bold text-sm mb-2 flex items-center gap-2">
+                    🎙️ Talklish 透客李許 EP50 : 
+                </p>
+                <p class="text-xs md:text-sm text-gray-300 leading-relaxed mb-4">
+                     &lt;&lt; 本週聊生活  &gt;&gt; EP50 | 的那些刻在我們心中的港片，先從我們推薦的片單來看看喔！
+                    <br><br>
+                    本集我們聊了我們熱愛的的香港電影，那些我們看到就會放下遙控的周星馳系列、古惑仔系列，也包含恐怖喜劇的殭屍道長、屍家重地還有每年過年要攜家帶眷去電影院看的賀歲片，更分享了香港電影的黃金年代的稱霸亞洲到為什麼衰落！
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 items-center justify-between mb-4">
+                    <a href="https://linkgoods.com/talklish" target="_blank" class="w-full sm:w-auto text-center px-5 py-2.5 bg-neonPink hover:bg-pink-600 text-white text-xs font-bold rounded-lg shadow-neon-pink transition-all">
+                        立即收聽 LINK 🎧
+                    </a>
+                    <a href="https://www.instagram.com/talklish.talks/" target="_blank" class="w-full sm:w-auto text-center px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-neonCyan border border-neonCyan/40 text-xs font-bold rounded-lg transition-all">
+                        追蹤我們的 IG 📸
+                    </a>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-800 text-xs text-gray-400 leading-relaxed">
+                    <p class="font-bold text-gray-300 mb-1">&lt;&lt; Talklish 透客李許 &gt;&gt;</p>
+                    <p>你好 我們是 Talklish 主講人｜木子李、言午許</p>
+                    <p>我們專做一些沒知識性的分享、全方位的閒聊。關注娛樂、音樂、展覽、流行與荒誕人生，分享一些不管到幾歲都要持續熱愛生活的大小事。你的第三個好朋友，負責講幹話🎙️ 本週想講在這👉 Podcast : Talk_lish 透客李許</p>
+                </div>
             </div>
 
-            <button class="btn" style="margin-top: 20px;" onclick="restartQuiz()">再挑戰一次</button>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="restartQuiz()" class="px-8 py-3.5 bg-neonPink hover:bg-pink-600 text-white font-bold rounded-xl shadow-neon-pink transition-all transform hover:scale-105 cursor-pointer uppercase tracking-wider text-sm">
+                    🔄 再次挑戰
+                </button>
+                <button onclick="shareResult()" class="px-8 py-3.5 bg-gray-800 hover:bg-gray-700 text-neonCyan border border-neonCyan/40 font-bold rounded-xl transition-all transform hover:scale-105 cursor-pointer uppercase tracking-wider text-sm">
+                    📋 複製成績分享
+                </button>
+            </div>
         </div>
-    </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-4 text-xs text-gray-500 tracking-wider">
+        © 2026 港片爭霸戰 · Talklish 透克李許 聯名製作
+    </footer>
 
     <script>
-        // 30道修正後的港片題目資料（無多餘解析與提示）
-        const questions = [
-            // PART 1｜選擇題 (1-15)
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《唐伯虎點秋香》中，華夫人的天下第一奇毒是？", options: ["A. 含笑半步癲", "B. 一日喪命散", "C. 奇銀合歡散", "D. 我愛一條柴"], answer: 1 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《賭俠》中小刀打電話給賭神時，賭神人在哪裡？", options: ["A. 美國", "B. 香港", "C. 巴西", "D. 澳門"], answer: 2 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《無間道》中，梁朝偉飾演的陳永仁在天台對劉德華說的名台詞是？", options: ["A. 其實我是個警察", "B. 以前我沒得選，現在我想做個好人", "C. 對不起，我是警察", "D. 我話講完，誰贊成，誰反對？"], answer: 2 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《少林足球》中，少林足球正式成軍後，第一場比賽遇到的是哪一隊？", options: ["A. 少林羅漢隊", "B. 豆腐金剛隊", "C. 魔鬼隊", "D. 金剛鐵腿隊"], answer: 1 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《少林足球》中，二師兄、三師兄、四師兄各自是什麼武功？", options: ["A. 金鐘罩鐵布衫、旋風地堂腿、鬼影擒拿手", "B. 旋風地堂腿、金鐘罩鐵布衫、鬼影擒拿手", "C. 旋風地堂腿、金鐘罩鐵布衫、鬼影擒拿手", "D. 鬼影擒拿手、金鐘罩鐵布衫、旋風地堂腿"], answer: 3 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《逃學威龍》中，周星馳臥底進入學校要幫高級警司找什麼東西？", options: ["A. 消失的考卷", "B. 善良的槍", "C. 毒品交易名冊", "D. 校長的私房錢"], answer: 1 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《重慶森林》中，金城武飾演的何志武一直在收集什麼日期的鳳梨罐頭？", options: ["A. 5月1日", "B. 4月1日", "C. 5月20日", "D. 10月10日"], answer: 0 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《與龍共舞》中，「漂漂教月光的菲律賓減肥法」中，Tuesday 是怎麼吃？", options: ["A. 隨便吃", "B. 任你吃", "C. 不准吃", "D. 盡量吃"], answer: 1 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《大話西遊》中，至尊寶說過那段著名的「如果上天能給我一個再來一次的機會」，是在對誰說？", options: ["A. 白晶晶", "B. 紫霞仙子", "C. 春三十娘", "D. 鐵扇公主"], answer: 1 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《唐伯虎點秋香》中，含笑半步癲是用什麼做的？", options: ["A. 枇杷，熊掌，桔梗，加上天山雪蓮配製而成", "B. 蜂蜜，川貝，鹿角，加上天山白蓮配製而成", "C. 蜂蜜，川貝，桔梗，加上天山雪蓮配製而成", "D. 蜂蜜，人參，桔梗，加上天山白蓮配製而成"], answer: 2 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《唐伯虎點秋香》中，在唐伯虎還沒報仇以前，兵器譜上排行第四的是？", options: ["A. 小李飛刀他娘", "B. 書生奪命劍", "C. 霸王槍", "D. 小李飛刀"], answer: 0 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《九品芝麻官》何夫人的房裡有什麼？", options: ["A. 山西布政的五千兩", "B. 八府巡撫的五千兩", "C. 山西知縣的五千兩", "D. 廣州知縣的五千兩"], answer: 0 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《嚦咕嚦咕新年財》詠琪在片中沒有做過哪個職業？", options: ["A. 稅務員", "B. 交通警察", "C. 空姐", "D. 外送員"], answer: 3 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《與龍共舞》裡，十三姑在幫王大為律師治療的時候，龍家駿忘了帶毛衣針進箱子，便改用什麼東西造成刺刺的效果？", options: ["A. 吹風機", "B. 別針", "C. 大頭針", "D. 筷子"], answer: 2 },
-            { type: "choice", category: "🟢 PART 1｜選擇題 (每題 1 分)", q: "《射鵰英雄傳之東成西就》周伯通對小師妹說，晚上不睡覺又出來假扮誰？", options: ["A. 林青霞", "B. 王祖賢", "C. Talklish", "D. 劉嘉玲"], answer: 1 },
+        // 30 道精準對齊配分與題目的完整資料庫
+        // 選擇題 1-15 每題 1 分 (共 15 分)
+        // 填空題 16-25 每題 3 分 (共 30 分)
+        // 加分題 26-30 每題 1 分 (共 5 分) -> 總分 50 分
+        const quizData = [
+            // PART 1: 選擇題 (第 1 ~ 15 題，每題 1 分)
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "1. 《唐伯虎點秋香》中，華夫人的天下第一奇毒是？",
+                options: ["A. 含笑半步癲", "B. 一日喪命散", "C. 奇銀合歡散", "D. 我愛一條柴"],
+                answer: 1, // B
+                explanation: "💡 解析：華夫人：「我告訴你，你剛才喝的那杯參茶，已經被我下了天下第一奇毒『一日喪命散』」"
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "2. 《賭俠》中小刀打電話給賭神時，賭神人在哪裡？",
+                options: ["A. 美國", "B. 香港", "C. 巴西", "D. 澳門"],
+                answer: 2, // C
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "3. 《無間道》中，梁朝偉飾演的陳永仁在天台對劉德華說的名台詞是？",
+                options: ["A. 其實我是個警察", "B. 以前我沒得選，現在我想做個好人", "C. 對不起，我是警察", "D. 我話講完，誰贊成，誰反對？"],
+                answer: 2, // C
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "4. 《少林足球》中，少林足球正式成軍後，第一場比賽遇到的是哪一隊？",
+                options: ["A. 少林羅漢隊", "B. 豆腐金剛隊", "C. 魔鬼隊", "D. 金剛鐵腿隊"],
+                answer: 1, // B
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "5. 《少林足球》中，二師兄、三師兄、四師兄各自是什麼武功？",
+                options: [
+                    "A. 金鐘罩鐵布衫、旋風地堂腿、鬼影擒拿手",
+                    "B. 旋風地堂腿、鬼影擒拿手、金鐘罩鐵布衫",
+                    "C. 旋風地堂腿、金鐘罩鐵布衫、鬼影擒拿手",
+                    "D. 鬼影擒拿手、金鐘罩鐵布衫、旋風地堂腿"
+                ],
+                answer: 3, // D
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "6. 《逃學威龍》中，周星馳臥底進入學校要幫高級警司找什麼東西？",
+                options: ["A. 消失的考卷", "B. 善良的槍", "C. 毒品交易名冊", "D. 校長的私房錢"],
+                answer: 1, // B
+                explanation: "💡 解析：飛虎隊隊長周星星最頭痛的任務就是找那一把弄丟的散彈槍。"
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "7. 《重慶森林》中，金城武飾演的何志武一直在收集什麼日期的鳳梨罐頭？",
+                options: ["A. 5月1日", "B. 4月1日", "C. 5月20日", "D. 10月10日"],
+                answer: 0, // A
+                explanation: "💡 解析：這天剛好是他自己的生日，也是他給予與前女友阿May復合期限的最後一天。"
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "8. 《與龍共舞》中，「漂漂教月光的菲律賓減肥法」中，Tuesday 是怎麼吃？",
+                options: ["A. 隨便吃", "B. 任你吃", "C. 不准吃", "D. 盡量吃"],
+                answer: 1, // B
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "9. 《大話西遊》中，至尊寶說過那段著名的「如果上天能給我一個再來一次的機會」，是在對誰說？",
+                options: ["A. 白晶晶", "B. 紫霞仙子", "C. 春三十娘", "D. 鐵扇公主"],
+                answer: 1, // B
+                explanation: "💡 解析：這段台詞成了華語電影史上最經典的愛情遺憾旁白。"
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "10. 《唐伯虎點秋香》中，含笑半步癲是用什麼做的？",
+                options: [
+                    "A. 枇杷，熊掌，桔梗，加上天山雪蓮配製而成",
+                    "B. 蜂蜜，川貝，鹿角，加上天山白蓮配製而成",
+                    "C. 蜂蜜，川貝，桔梗，加上天山雪蓮配製而成",
+                    "D. 蜂蜜，人參，桔梗，加上天山白蓮配製而成"
+                ],
+                answer: 2, // C
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "11. 《唐伯虎點秋香》中，在唐伯虎還沒報仇以前，兵器譜上排行第四的是？",
+                options: ["A. 小李飛刀他娘", "B. 書生奪命劍", "C. 霸王槍", "D. 小李飛刀"],
+                answer: 0, // A
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "12. 《九品芝麻官》何夫人的房裡有什麼？",
+                options: ["A. 廣州知縣的五千兩", "B. 八府巡撫的五千兩", "C. 山西知縣的五千兩", "D. 山西布政的五千兩"],
+                answer: 3, // D
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "13. 《嚦咕嚦咕新年財》詠琪在片中沒有做過哪個職業？",
+                options: ["A. 稅務員", "B. 交通警察", "C. 空姐", "D. 外送員"],
+                answer: 3, // D
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "14. 《與龍共舞》裡，十三姑在幫王大為律師治療的時候，龍家駿忘了帶毛衣針進箱子，便改用什麼東西造成刺刺的效果？",
+                options: ["A. 吹風機", "B. 別針", "C. 大頭針", "D. 筷子"],
+                answer: 1, // B
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🟢 PART 1｜選擇題（第 1 ～ 15 題，每題 1 分）",
+                question: "15. 《射鵰英雄傳之東成西就》周伯通對小師妹說，晚上不睡覺又出來假扮誰？",
+                options: ["A. 林青霞", "B. 王祖賢", "C. Talklish", "D. 劉嘉玲"],
+                answer: 1, // B
+                explanation: ""
+            },
 
-            // PART 2｜填空／簡答題 (16-25，每題3分)
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "四個好色的女人中，Frankie 點了首「光棍姻緣」，其中的歌詞是含一個大雪茄，假裝是___？", answer: "總經理" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "《大內密探零零漆》裡面，得到最佳男主角獎的是誰？", answer: "阿發的岳父" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "《家有喜事》中《醉拳甘迺迪》是什麼的續集？（需答出5個字）", answer: "南拳北腿孫中山" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "《賭俠》中影片最後，周星祖和夢羅還了海珊多少錢？", answer: "一塊兩毛五" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "在《九品芝麻官》中，星爺的老媽說尚方寶劍是誰賜的？", answer: "崇禎皇帝" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "《摩登如來神掌》中，天殘說「大俠才吃漢堡包，你不是大俠，吃XX」，最後是叫他吃什麼？", answer: "香蕉" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "由鄭伊健與鍾麗緹主演的《人魚傳說》中，人魚小美一直想要阿志帶她去吃什麼？", answer: "辣椒炒海瓜子" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "時光倒流的月光寶盒要喊什麼咒語？", answer: "般若波羅蜜" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "《破壞之王》中，何金銀（周星馳）為了追求阿麗，使出了什麼必殺絕技？", answer: "無敵風火輪" },
-            { type: "text", category: "🟡 PART 2｜填空／簡答題 (每題 3 分)", q: "屍家重地大BOSS殭屍是誰？", answer: "秦始皇" },
+            // PART 2: 填空／簡答題 (第 16 ~ 25 題，每題 3 分)
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "16. 四個好色的女人中，Frankie 點了首「光棍姻緣」，其中的歌詞是含一個大雪茄，假裝是xxx？（提示：答案共3個字）",
+                acceptedAnswers: ["總經理"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "17. 《大內密探零零漆》裡面，得到最佳男主角獎的是誰？（提示：答案共5個字）",
+                acceptedAnswers: ["阿發的岳父", "岳父大人"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "18. 《家有喜事》中《醉拳甘迺迪》是什麼的續集？（提示：答案共7個字）",
+                acceptedAnswers: ["南拳北腿孫中山"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "19. 《賭俠》中影片最後，周星祖和夢羅還了海珊多少錢？",
+                acceptedAnswers: ["一塊兩毛五", "1.25元", "1元2角5分"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "20. 在《九品芝麻官》中，星爺的老媽說尚方寶劍是誰賜的？（提示：答案什麼皇帝）",
+                acceptedAnswers: ["明朝", "明朝皇帝", "崇禎皇帝", "明朝崇禎皇帝"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "21. 《摩登如來神掌》中，天殘說「大俠才吃漢堡包，你不是大俠，吃XX」，最後是叫他吃什麼？（提示：答案共2個字）",
+                acceptedAnswers: ["香蕉"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "22. 由鄭伊健與鍾麗緹主演的《人魚傳說》中，人魚小美一直想要阿志帶她去吃什麼？（提示：答案共6個字）",
+                acceptedAnswers: ["辣椒炒海瓜子"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "23. 《大話西遊》中，時光倒流的月光寶盒要喊什麼咒語？（提示：答案共5個字）",
+                acceptedAnswers: ["般若波羅蜜"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "24. 《破壞之王》中，何金銀（周星馳）為了追求阿麗，使出了什麼必殺絕技？（提示：答案共5個字）",
+                acceptedAnswers: ["無敵風火輪"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🟡 PART 2｜填空／簡答題（第 16 ～ 25 題，每題 3 分）",
+                question: "25. 屍家重地大BOSS殭屍是誰？（提示：答案共3個字）",
+                acceptedAnswers: ["秦始皇"],
+                explanation: ""
+            },
 
-            // PART 3｜加分題 (26-30，每題1分)
-            { type: "choice", category: "🔵 PART 3｜加分題 Bonus (每題 1 分)", q: "《我的左眼見到鬼》裡，女主角跟前任老公才認識幾天就結婚？", options: ["A. 1天", "B. 3天", "C. 7天", "D. 30天"], answer: 2 },
-            { type: "choice", category: "🔵 PART 3｜加分題 Bonus (每題 1 分)", q: "《富貴再逼人》中的彩券是哪一國的彩券？", options: ["A. 美國", "B. 加拿大", "C. 英國", "D. 香港"], answer: 1 },
-            { type: "choice", category: "🔵 PART 3｜加分題 Bonus (每題 1 分)", q: "電影《超級學校霸王》演出陣容眾星雲集，以下誰沒有在電影中有任何身影的露出？", options: ["A. 任達華", "B. 許志安", "C. 周星馳", "D. 黎明"], answer: 3 },
-            { type: "choice", category: "🔵 PART 3｜加分題 Bonus (每題 1 分)", q: "《與龍共舞》裡十一姑在大嶼山的雜貨店，可能是現在香港的哪裡？", options: ["A. 香港迪士尼樂園", "B. 尖沙咀海濱星光大道", "C. 西貢郊野公園", "D. 香港海洋公園"], answer: 0 },
-            { type: "choice", category: "🔵 PART 3｜加分題 Bonus (每題 1 分)", q: "香港電影在經歷了 1980 至 1990 年代「東方荷里活」的輝煌黃金時期後，逐漸走向沒落，下列哪一個「不是」香港電影可能沒落的原因？", options: ["A. 過度迎合中國大陸市場與嚴格審查，導致本土特色流失", "B. 台灣及東南亞等重要海外市場流失，加上盜版猖獗", "C. 電影工業人才斷層嚴重，中生代及新導演未能順利接棒", "D. 本土影院過剩導致票價崩盤，使得電影公司資金過度浮濫"], answer: 3 }
+            // PART 3: 加分題 Bonus (第 26 ~ 30 題，每題 1 分)
+            {
+                type: "fill",
+                part: "🔵 PART 3｜加分題 Bonus（第 26 ～ 30 題，每題 1 分）",
+                question: "26. 《我的左眼見到鬼》裡，女主角跟前任老公才認識幾天就結婚？(提示：幾天？）",
+                acceptedAnswers: ["7", "7天", "七天", "7 天"],
+                explanation: ""
+            },
+            {
+                type: "fill",
+                part: "🔵 PART 3｜加分題 Bonus（第 26 ～ 30 題，每題 1 分）",
+                question: "27. 富貴再逼人中的彩券是哪一國的彩券？",
+                acceptedAnswers: ["加拿大"],
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🔵 PART 3｜加分題 Bonus（第 26 ～ 30 題，每題 1 分）",
+                question: "28. 電影《超級學校霸王》演出陣容眾星雲集，以下誰沒有在電影中有任何身影的露出？",
+                options: ["A. 任達華", "B. 許志安", "C. 周星馳", "D. 黎明"],
+                answer: 3, // D
+                explanation: "周星星，《逃學威龍》人物，以海報形式出現"
+            },
+            {
+                type: "choice",
+                part: "🔵 PART 3｜加分題 Bonus（第 26 ～ 30 題，每題 1 分）",
+                question: "29. 與龍共舞裡11姑在大嶼山的雜貨店，可能是現在香港的哪裡？",
+                options: [
+                    "A. 香港迪士尼樂園",
+                    "B. 尖沙咀海濱星光大道",
+                    "C. 西貢郊野公園",
+                    "D. 香港海洋公園"
+                ],
+                answer: 2, // C
+                explanation: ""
+            },
+            {
+                type: "choice",
+                part: "🔵 PART 3｜加分題 Bonus（第 26 ～ 30 題，每題 1 分）",
+                question: "30. 香港電影在經歷了 1980 至 1990 年代「東方荷里活」的輝煌黃金時期後，逐漸走向沒落，下列哪一個「不是」香港電影可能沒落的原因？",
+                options: [
+                    "A. 過度迎合中國大陸市場與嚴格審查，導致本土特色流失",
+                    "B. 台灣及東南亞等重要海外市場流失，加上盜版猖獗",
+                    "C. 電影工業人才斷層嚴重，中生代及新導演未能順利接棒",
+                    "D. 本土影院過剩導致票價崩盤，使得電影公司資金過度浮濫"
+                ],
+                answer: 3, // D
+                explanation: ""
+            }
         ];
 
-        let currentIdx = 0;
+        let currentQuestionIndex = 0;
         let score = 0;
+        let isAnswered = false;
 
-        const startScreen = document.getElementById("start-screen");
-        const quizScreen = document.getElementById("quiz-screen");
-        const resultScreen = document.getElementById("result-screen");
-        
-        const qCategory = document.getElementById("question-category");
-        const qProgress = document.getElementById("question-progress");
-        const qText = document.getElementById("question-text");
-        const optionsContainer = document.getElementById("options-container");
-        const textInputContainer = document.getElementById("text-input-container");
-        const userInput = document.getElementById("user-answer-input");
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const progressIndicator = document.getElementById('progress-indicator');
+        const currentScoreDisplay = document.getElementById('current-score');
+        const questionCategory = document.getElementById('question-category');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const inputContainer = document.getElementById('input-container');
+        const shortAnswerInput = document.getElementById('short-answer-input');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackText = document.getElementById('feedback-text');
 
         function startQuiz() {
-            startScreen.classList.add("hide");
-            quizScreen.classList.remove("hide");
-            currentIdx = 0;
+            currentQuestionIndex = 0;
             score = 0;
+            welcomeScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
             loadQuestion();
         }
 
         function loadQuestion() {
-            let q = questions[currentIdx];
-            qCategory.innerText = q.category;
-            qProgress.innerText = `第 ${currentIdx + 1} / ${questions.length} 題`;
-            qText.innerText = q.q;
+            isAnswered = false;
+            feedbackBox.classList.add('hidden');
+            shortAnswerInput.value = '';
 
-            optionsContainer.innerHTML = "";
-            userInput.value = "";
+            const q = quizData[currentQuestionIndex];
+            progressIndicator.innerText = `題目 ${currentQuestionIndex + 1} / ${quizData.length}`;
+            currentScoreDisplay.innerText = `目前得分: ${score} / 50`;
+            questionCategory.innerText = q.part;
+            questionText.innerText = q.question;
 
-            if (q.type === "choice") {
-                optionsContainer.classList.remove("hide");
-                textInputContainer.classList.add("hide");
-                q.options.forEach((opt, idx) => {
-                    let btn = document.createElement("button");
-                    btn.className = "option-btn";
-                    btn.innerText = opt;
-                    btn.onclick = () => selectChoice(idx);
+            if (q.type === 'choice') {
+                optionsContainer.classList.remove('hidden');
+                inputContainer.classList.add('hidden');
+                optionsContainer.innerHTML = '';
+                q.options.forEach((option, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left p-4 rounded-xl bg-black/40 border border-gray-700 hover:border-neonCyan text-gray-200 transition-all cursor-pointer flex items-center group";
+                    btn.innerHTML = `<span class="w-8 h-8 rounded-lg bg-gray-800 text-neonCyan flex items-center justify-center font-bold mr-3 group-hover:bg-neonCyan group-hover:text-darkBg transition-colors">${String.fromCharCode(65 + idx)}</span> <span class="flex-grow">${option}</span>`;
+                    btn.onclick = () => selectOption(idx);
                     optionsContainer.appendChild(btn);
                 });
             } else {
-                optionsContainer.classList.add("hide");
-                textInputContainer.classList.remove("hide");
+                optionsContainer.classList.add('hidden');
+                inputContainer.classList.remove('hidden');
             }
         }
 
-        function selectChoice(selectedIdx) {
-            let q = questions[currentIdx];
-            let points = (currentIdx >= 15 && currentIdx < 25) ? 3 : 1;
-            if (selectedIdx === q.answer) {
-                score += points;
+        function selectOption(idx) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const q = quizData[currentQuestionIndex];
+            const buttons = optionsContainer.children;
+            let earned = 0;
+            // 配分規則：1~15題每題1分，16~25題每題3分，26~30題每題1分
+            if (currentQuestionIndex < 15) earned = 1;
+            else if (currentQuestionIndex < 25) earned = 3;
+            else earned = 1;
+
+            if (idx === q.answer) {
+                score += earned;
+                buttons[idx].classList.remove('border-gray-700', 'bg-black/40');
+                buttons[idx].classList.add('border-green-500', 'bg-green-950/40', 'text-green-300');
+                let expl = (q.explanation && q.explanation.trim() !== "") ? `<br><span class="text-gray-300 mt-1 block">${q.explanation}</span>` : '';
+                feedbackText.innerHTML = `<strong class="text-green-400">✔️ 答對啦！</strong> (+${earned}分)${expl}`;
+            } else {
+                buttons[idx].classList.remove('border-gray-700', 'bg-black/40');
+                buttons[idx].classList.add('border-red-500', 'bg-red-950/40', 'text-red-300');
+                
+                buttons[q.answer].classList.remove('border-gray-700', 'bg-black/40');
+                buttons[q.answer].classList.add('border-green-500', 'bg-green-950/40', 'text-green-300');
+                let expl = (q.explanation && q.explanation.trim() !== "") ? `<br><span class="text-gray-300 mt-1 block">${q.explanation}</span>` : '';
+                feedbackText.innerHTML = `<strong class="text-red-400">❌ 答錯囉！</strong> 正確答案是【${q.options[q.answer]}】。${expl}`;
             }
-            nextStep();
+
+            currentScoreDisplay.innerText = `目前得分: ${score} / 50`;
+            feedbackBox.classList.remove('hidden');
         }
 
-        function handleNext() {
-            let q = questions[currentIdx];
-            if (q.type === "text") {
-                let userVal = userInput.value.trim();
-                let points = 3;
-                if (userVal === q.answer) {
-                    score += points;
+        function submitShortAnswer() {
+            if (isAnswered) return;
+            const val = shortAnswerInput.value.trim();
+            if (!val) {
+                alert('請輸入答案！或寫<不知道>');
+                return;
+            }
+            isAnswered = true;
+
+            const q = quizData[currentQuestionIndex];
+            let earned = 0;
+            if (currentQuestionIndex < 15) earned = 1;
+            else if (currentQuestionIndex < 25) earned = 3;
+            else earned = 1;
+
+            let isCorrect = false;
+            for (let ans of q.acceptedAnswers) {
+                if (val.includes(ans) || ans.includes(val)) {
+                    isCorrect = true;
+                    break;
                 }
             }
-            nextStep();
+
+            if (isCorrect) {
+                score += earned;
+                let expl = (q.explanation && q.explanation.trim() !== "") ? `<br><span class="text-gray-300 mt-1 block">${q.explanation}</span>` : '';
+                feedbackText.innerHTML = `<strong class="text-green-400">✔️ 答對啦！</strong> (+${earned}分)${expl}`;
+            } else {
+                let expl = (q.explanation && q.explanation.trim() !== "") ? `<br><span class="text-gray-300 mt-1 block">${q.explanation}</span>` : '';
+                feedbackText.innerHTML = `<strong class="text-red-400">❌ 答錯囉！</strong> 正確答案為：<span class="text-neonCyan font-bold">${q.acceptedAnswers[0]}</span>。${expl}`;
+            }
+
+            currentScoreDisplay.innerText = `目前得分: ${score} / 50`;
+            feedbackBox.classList.remove('hidden');
         }
 
-        function nextStep() {
-            currentIdx++;
-            if (currentIdx < questions.length) {
+        shortAnswerInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                submitShortAnswer();
+            }
+        });
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
                 loadQuestion();
             } else {
                 showResult();
@@ -428,35 +623,60 @@
         }
 
         function showResult() {
-            quizScreen.classList.add("hide");
-            resultScreen.classList.remove("hide");
-            document.getElementById("final-score").innerText = score + " 分";
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
 
-            let rank = "";
-            let msg = "";
-            if (score >= 45) {
-                rank = "👑 港片之王";
-                msg = "你不是在看港片，你是活在港片裡！";
-            } else if (score >= 35) {
-                rank = "🔥 港片大師";
-                msg = "經典台詞跟細節掌握得非常不錯！";
-            } else if (score >= 25) {
-                rank = "😎 港片熟客";
-                msg = "知道不少經典，但還有一些冷門細節需要補課。";
-            } else if (score >= 15) {
-                rank = "🍿 港片觀眾";
-                msg = "有看過，但可能都是「朋友播什麼你看什麼」。";
+            document.getElementById('final-score-display').innerText = `${score} / 50`;
+
+            let title = "";
+            let comment = "";
+            let emoji = "";
+
+            if (score >= 41) {
+                emoji = "👑";
+                title = "站在港片之巔的 king of HK movie";
+                comment = "連經典對白、幕後彩蛋都難不倒你，向代代傳頌的巨星致敬，這座港片之王頒給你當之無愧。那你必須聽聽 Podcast : << Talklish 透客李許 >> EP50 | 的那些刻在我們心中的港片，來交流我們的特推片單一不一樣！";
+            } else if (score >= 31) {
+                emoji = "🔥";
+                title = "港片的一代宗師";
+                comment = "對九十年代黃金時期的經典大作瞭若指掌。只差臨門一腳就能稱霸江湖，繼續保持這股銳氣！那你必須聽聽 Podcast : << Talklish 透客李許 >> EP50 | 的那些刻在我們心中的港片，來交流我們的特推片單ㄧ不一樣！";
+            } else if (score >= 21) {
+                emoji = "😎";
+                title = "港片熟客";
+                comment = "你總能順口接出下一句台詞。基礎很穩，但還得再多看兩部進修！那你必須聽聽 Podcast : << Talklish 透客李許 >> EP50 | 的那些刻在我們心中的港片，來交流我們的特推片單ㄧ不一樣！";
+            } else if (score >= 11) {
+                emoji = "🍿";
+                title = "港片觀眾";
+                comment = "對於港片的記憶可能只停留在周星馳的幾部熱門金句。別氣餒，你可以先來聽聽 Podcast : << Talklish 透客李許 >> EP50 | 的那些刻在我們心中的港片，來交流我們的特推片單ㄧ不一樣！";
             } else {
-                rank = "🥲 港片路人";
-                msg = "你是否剛出獄！？";
+                emoji = "🥲";
+                title = "港片路人";
+                comment = "你是否剛出獄！？怎麼會錯過這麼多，別氣餒，你可以先來聽聽 Podcast : << Talklish 透客李許 >> EP50 | 的那些刻在我們心中的港片，先從我們推薦的片單來看看喔！";
             }
-            document.getElementById("rank-title").innerText = rank;
-            document.getElementById("result-message").innerText = msg;
+
+            document.getElementById('result-emoji').innerText = emoji;
+            document.getElementById('result-title').innerText = title;
+            document.getElementById('result-comment').innerText = comment;
         }
 
         function restartQuiz() {
-            resultScreen.classList.add("hide");
-            startScreen.classList.remove("hide");
+            startQuiz();
+        }
+
+        function shareResult() {
+            const shareText = `我在「港片爭霸戰」中拿下了 ${score} / 50 分！獲得封號：「${document.getElementById('result-title').innerText}」。快來挑戰看看你是港片之王還是路人！`;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = shareText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                alert('成績已複製到剪貼板，快分享給朋友挑戰！');
+            } catch (err) {
+                console.error('無法複製', err);
+            }
+            document.body.removeChild(textarea);
         }
     </script>
 </body>
